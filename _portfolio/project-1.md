@@ -24,8 +24,6 @@ collection: portfolio
    - [Order Flow & Cart Management](#order-flow--cart-management)
    - [Admin Dashboard](#admin-dashboard)
 5. [Deployment](#deployment)
-6. [Setup & Run](#setup--run)
-7. [Screenshots & Code Snippets](#screenshots--code-snippets)
 8. [Future Improvements](#future-improvements)
 
 ---
@@ -126,18 +124,125 @@ collection: portfolio
     <h3>Video Demonstration</h3>
 
     <div class="embed-container">
-        <iframe src="https://drive.google.com/file/d/1Ec_4aB52Om-zHYhnzSE8C4vnKvmyd_2m/preview" allowfullscreen="true" muted="true"></iframe>
+        <iframe src="https://drive.google.com/file/d/1Ec_4aB52Om-zHYhnzSE8C4vnKvmyd_2m/preview" allowfullscreen="true" style="width:100%; height:500px;"></iframe>
     </div>
 
 ---
 
-- ### Order Flow & Cart Management
+- ### [Order Flow](https://gist.github.com/MykhailoKononov/8ba13f20aa66dad3a61dbf8b5f04a9b0) & [Cart Management](https://gist.github.com/MykhailoKononov/ad0bbdc70d894a0aa467346ad3506cde)
     - This service layer handles all cart operations and checkout logic, using Redis for fast, in‑memory session storage. Key responsibilities include storing per‑user carts, enforcing TTL expiration, calculating totals, and orchestrating the creation of Order and OrderItem records in PostgreSQL via SQLAlchemy:
 
-    - [Link](#) to code snippet for `cart_handlers`
+    - [Link](https://gist.github.com/MykhailoKononov/8ba13f20aa66dad3a61dbf8b5f04a9b0) to code snippet for `cart_handlers`
+    - [Link](https://gist.github.com/MykhailoKononov/ad0bbdc70d894a0aa467346ad3506cde) to code snippet for `cart_redis`
 
     <h3>Video Demonstration</h3>
 
     <div class="embed-container">
-        <iframe src="https://drive.google.com/file/d/1Ec_4aB52Om-zHYhnzSE8C4vnKvmyd_2m/preview" allowfullscreen="true" muted="true"></iframe>
+        <iframe src="https://drive.google.com/file/d/1F_Vxg4P7diTBV5j0VIcQNewhzwYKyFHW/preview" allowfullscreen="true"   style="width:100%; height:500px;"></iframe>
     </div>
+
+---
+
+- ### Admin Dashboard
+    - All administrative functions are handled directly through the Telegram bot, allowing managers to:
+        1. **Manage Inventory**
+            - Add new products or update existing item details (price, stock, description)
+            - Record incoming supplies and adjust stock levels on the fly
+        2. **Process Orders**
+            - View incoming order requests with full details (user info, delivery method, cart contents)
+            - Approve or reject orders, with automatic status updates sent to customers
+            - Track order history and filter by status, date, or manager
+        3. **Issue Promo Codes**
+            - Generate and revoke promotional codes from within the bot interface
+            - Set code parameters (discount value, expiry date, usage limits) 
+
+
+    - [Link](https://gist.github.com/MykhailoKononov/867dd3cb5266852da368cd041723a815) to code snippet for `admin/order`
+    - [Link](https://gist.github.com/MykhailoKononov/c74e682d07b171daaeecda761fe32f29) to code snippet for `admin/supply`
+
+    <h3>Video Demonstration (from manager's account)</h3>
+
+    <div class="embed-container">
+        <iframe src="https://drive.google.com/file/d/1DCb2FyvPkEeqb1BbjWzGTSaVKfa14s6Z/preview" allowfullscreen="true"   style="width:100%; height:500px;"></iframe>
+    </div>
+
+---
+<a id="deployment"></a>
+<div style="text-align: center; margin: 1em 0;">
+    <h2>Deployment</h2>
+</div>
+
+Services are defined in docker-compose.yml:
+
+```python
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server --save 60 1 --loglevel warning
+    restart: on-failure
+    ports:
+      - "6379:6379"
+    networks:
+      - bot_network
+
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bot_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  bot:
+    build: .
+    container_name: bot
+    command: sh -c "make migrate && python -m main"
+    env_file:
+      - .env
+    volumes:
+      - ./migrations:/migrations
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - bot_network
+
+volumes:
+  pgdata:
+
+networks:
+  bot_network:
+    driver: bridge
+```
+
+To deploy on your Linux server:
+
+1. Clone repo
+2. Set environment variables
+3. docker-compose up -d --build
+
+
+---
+<a id="future-improvements"></a>
+<div style="text-align: center; margin: 1em 0;">
+    <h2>Future Improvements</h2>
+</div>
+
+- Migrate Admin from Telegram → Django web admin
+- Integrate payment processing (Stripe, crypto)
+- Add user reviews & ratings in bot
+- Horizontal scaling with Kubernetes

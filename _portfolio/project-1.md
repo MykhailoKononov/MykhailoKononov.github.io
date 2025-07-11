@@ -58,21 +58,6 @@ collection: portfolio
     <h2>Architecture & Tech Stack</h2>
 </div>
 
-
-```plaintext
-┌───────────────┐     ┌──────────┐     ┌───────────────┐
-│ Telegram User │⇄    │ Bot API  │⇄   │ PostgreSQL DB │
-│  (aiogram)    │     │(FastAPI) │     │ with SQLAlchemy│
-└───────────────┘     └──────────┘     └───────────────┘
-                        │
-                        │ Redis (Cart sessions, rate‑limit)
-                        ↓
-                    ┌────────┐
-                    │ Admin  │
-                    │Frontend│
-                    └────────┘
-```
-
 - **Aiogram:** handles Telegram message & callback queries
 
 - **PostgreSQL + SQLAlchemy + Alembic:** relational database & migrations

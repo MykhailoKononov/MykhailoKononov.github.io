@@ -4,10 +4,13 @@ excerpt: "A modern FastAPI-based recipe sharing platform with CI/CD, observabili
 collection: portfolio
 ---
 
-<div style="text-align: center; margin: 1em 0;">
-    <h2>RecipeShare API Platform</h2>
-</div>
+------
 
+<h2>Github Repositiry Link - <a href = "https://github.com/MykhailoKononov/recipe-share-fastapi">https://github.com/MykhailoKononov/recipe-share-fastapi</a></h2>
+
+---
+
+# RecipeShare API Platform
 
 **RecipeShare** is a production‑ready, microservices‑style recipe‑sharing backend built with FastAPI and PostgreSQL. Designed for high throughput and reliability, it features robust API design, comprehensive test coverage, CI/CD automation, and full observability with Prometheus & Grafana.
 

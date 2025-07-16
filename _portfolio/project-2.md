@@ -63,3 +63,21 @@ collection: portfolio
 - **Docker & Docker Compose**: containerization and orchestration
 - **GitLab CI**: pipelines for linting, type checks, tests, builds, and deploys
 - **Prometheus & Grafana**: metrics collection and visualization
+
+---
+
+<a id="api-endpoints--testing"></a>
+<div style="text-align: center; margin: 1em 0;">
+    <h2>API Endpoints & Testing</h2>
+</div>
+
+### Routes
+- **[Authentication](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/app/routes/auth_route.py)**
+- **[Profiles & Recipes](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/app/routes/profile_route.py)**
+
+### Pytest:
+
+- **[Conftest](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/conftest.py)**
+- **[Auth test handlers](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/test_handlers/test_auth_services.py)**
+- **[Peofile & Recipe test handlers](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/test_handlers/test_user_profile.py)**
+

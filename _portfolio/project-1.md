@@ -8,7 +8,7 @@ collection: portfolio
 
 # Laboratory Shop
 
-**Laboratory Shop** is a production‑ready, scalable Telegram‑based ecommerce bot for vape products. Built with FastAPI, PostgreSQL, Redis, and Docker, it was actively used by real customers before being closed by the founder. This page dives into the architecture, key modules, and code snippets that demonstrate how the system works under the hood.
+**Laboratory Shop** is a production‑ready, scalable Telegram‑based ecommerce bot for vape products. Built with Aiogram, PostgreSQL, Redis, and Docker, it was actively used by real customers before being closed by the founder. This page dives into the architecture, key modules, and code snippets that demonstrate how the system works under the hood.
 
 ---
 

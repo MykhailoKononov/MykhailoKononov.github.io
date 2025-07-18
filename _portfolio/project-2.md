@@ -61,7 +61,7 @@ collection: portfolio
 - **Pytest**: testing framework with coverage reporting
 - **PostgreSQL**: relational data store, SQLAlchemy ORM
 - **Docker & Docker Compose**: containerization and orchestration
-- **GitLab CI**: pipelines for linting, type checks, tests, builds, and deploys
+- **GitHub Actions**: pipelines for linting, type checks, tests, builds, and deploys
 - **Prometheus & Grafana**: metrics collection and visualization
 
 ---
@@ -71,13 +71,34 @@ collection: portfolio
     <h2>API Endpoints & Testing</h2>
 </div>
 
-### Routes
+## Link to investigate [auth services](https://github.com/MykhailoKononov/recipe-share-fastapi/tree/master/app/services/auth_services)
+
+- **OAuth2 & JWT**  
+  Uses FastAPI’s `OAuth2PasswordBearer` (alias `oauth2_scheme`) to extract bearer tokens. Upon successful login or signup, the API issues a pair of JWT tokens (access + refresh) signed with a secure secret and configurable expiry.
+- **Email Confirmation**  
+  New users must verify their email via a one‑time link sent to their inbox. The `POST /auth/verify-email` endpoint consumes the token in the link to activate the account.
+- **Scoped Access**  
+  Endpoints are protected by OAuth2 scopes:  
+  - Public (no token) for signup, login, email verification, password reset  
+  - `user` scope for recipe creation, commenting, profile updates  
+  - `user:verified` to post and edit recipes
+
+### Routes:
 - **[Authentication](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/app/routes/auth_route.py)**
 - **[Profiles & Recipes](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/app/routes/profile_route.py)**
 
 ### Pytest:
 
 - **[Conftest](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/conftest.py)**
+  - Spins up a temporary test database in Docker and creates an isolated SQLAlchemy engine & session  
+  - Uses fixtures to **truncate** all tables before each test and seed test users/recipes, ensuring full isolation  
 - **[Auth test handlers](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/test_handlers/test_auth_services.py)**
 - **[Peofile & Recipe test handlers](https://github.com/MykhailoKononov/recipe-share-fastapi/blob/master/tests/test_handlers/test_user_profile.py)**
+  - Thorough `pytest` modules that exercise each auth endpoint in isolation  
+  - Achieves **>90% coverage** for success cases and all expected exceptions (invalid credentials, expired tokens, unverified email, insufficient scopes)  
 
+---
+
+<div style="text-align: center; margin: 1em 0;">
+    <h1>Project presentation is still in progress. This page is to be updated soon. Still, you can explore it on my <a href = "https://github.com/MykhailoKononov/recipe-share-fastapi">GitHub Repository</a></h1>
+</div>
